@@ -6,8 +6,6 @@ module "dynamodb" {
 
 module "iam" {
   source      = "./modules/iam"
-  region      = "us-east-1"  # Pass the region
-  account_id  = "510278866235"  # Pass your AWS account ID
   table_name  = module.dynamodb.table_name
 }
 
@@ -31,11 +29,5 @@ module "api_gateway" {
   source              = "./modules/api_gateway"
   read_data_lambda_arn = module.read_data_lambda.read_data_lambda_arn
   insert_data_lambda_arn = module.insert_data_lambda.insert_data_lambda_arn
-  region              = "us-east-1"  # Pass the region value here
+  region              = "us-east-1"  # Pass the region
 }
-
-
-output "api_url" {
-  value = module.api_gateway.api_url  # Reference the output from the api_gateway module
-}
-
