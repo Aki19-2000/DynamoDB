@@ -1,44 +1,41 @@
-resource "aws_iam_role" "lambda_role" {
-  name = "lambda_execution_role"
+resource "aws_iam_role" "lambda_dynamodb_role" {
+  name = "lambda_dynamodb_role"
 
-  assume_role_policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
       {
-        "Action": "sts:AssumeRole",
-        "Principal": {
-          "Service": "lambda.amazonaws.com"
-        },
-        "Effect": "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
       }
     ]
-  }
-  EOF
+  })
 }
 
-resource "aws_iam_policy" "lambda_policy" {
+resource "aws_iam_policy" "lambda_dynamodb_policy" {
   name        = "lambda_dynamodb_policy"
-  description = "IAM policy for Lambda to access DynamoDB"
-  
-  policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
+  description = "Policy to allow Lambda to interact with DynamoDB"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
       {
-        "Effect": "Allow",
-        "Action": [
+        Action   = [
           "dynamodb:PutItem",
-          "dynamodb:Scan"
-        ],
-        "Resource": "*"
+          "dynamodb:Scan",
+          "dynamodb:GetItem"
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:dynamodb:${var.region}:${var.account_id}:table/${aws_dynamodb_table.serverless_workshop_intro.name}"
       }
     ]
-  }
-  EOF
+  })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
-  role       = aws_iam_role.lambda_role.name
-  policy_arn = aws_iam_policy.lambda_policy.arn
+resource "aws_iam_role_policy_attachment" "lambda_dynamodb_policy_attachment" {
+  role       = aws_iam_role.lambda_dynamodb_role.name
+  policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
 }
