@@ -35,9 +35,9 @@ jobs:
     - name: Run Terraform validate
       run: terraform validate
 
-    # Run tflint to lint the Terraform code
-    - name: Run tflint
-      run: tflint
+    # Run tflint using custom configurations
+    - name: Run tflint with custom config
+      run: tflint --config .tflint.hcl
 
     # Run Checkov to scan for security misconfigurations
     - name: Run Checkov
