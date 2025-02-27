@@ -8,14 +8,20 @@ module "iam" {
   source = "./modules/iam"
 }
 
-module "lambda" {
+# First Lambda: Insert Data Lambda
+module "insert_data_lambda" {
   source        = "./modules/lambda"
   function_name = "insert_data_lambda"  # Provide the function name for the insert data Lambda
   role_arn      = module.iam.lambda_role_arn  # Reference the IAM role ARN output
   table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name
-  
-  # You can add another module or override this to create another Lambda for reading
+}
+
+# Second Lambda: Read Data Lambda
+module "read_data_lambda" {
+  source        = "./modules/lambda"
   function_name = "read_data_lambda"  # Provide the function name for the read data Lambda
+  role_arn      = module.iam.lambda_role_arn  # Reference the IAM role ARN output
+  table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name
 }
 
 module "api_gateway" {
