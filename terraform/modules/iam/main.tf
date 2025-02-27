@@ -29,7 +29,7 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
           "dynamodb:GetItem"
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:dynamodb:${var.region}:${var.account_id}:table/${aws_dynamodb_table.serverless_workshop_intro.name}"
+        Resource = "arn:aws:dynamodb:${var.region}:${var.account_id}:table/${var.table_name}"
       }
     ]
   })
