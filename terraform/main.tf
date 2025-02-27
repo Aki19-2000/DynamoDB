@@ -32,3 +32,8 @@ module "api_gateway" {
   read_data_lambda_arn = module.read_data_lambda.read_data_lambda_arn  # Pass Lambda ARN to API Gateway
   insert_data_lambda_arn = module.insert_data_lambda.insert_data_lambda_arn  # Pass Lambda ARN to API Gateway
 }
+
+output "api_url" {
+  value = module.api_gateway.api_url  # Reference the output from the api_gateway module
+}
+
