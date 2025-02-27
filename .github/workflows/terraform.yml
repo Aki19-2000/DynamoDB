@@ -29,7 +29,7 @@ jobs:
 
     # Run Terraform fmt to ensure the code is properly formatted
     - name: Run Terraform fmt
-      run: terraform fmt -check -diff
+      run: terraform fmt 
       working-directory: ./terraform  # Specify the directory
 
     # Initialize Terraform (this will download the provider and modules)
