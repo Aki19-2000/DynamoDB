@@ -5,25 +5,28 @@ module "dynamodb" {
 }
 
 module "iam" {
-  source = "./modules/iam"
+  source      = "./modules/iam"
+  table_name  = module.dynamodb.table_name  # Pass the DynamoDB table name
 }
 
 # First Lambda: Insert Data Lambda
 module "insert_data_lambda" {
   source        = "./modules/lambda"
-  function_name = "insert_data_lambda"  # Provide the function name for the insert data Lambda
-  role_arn      = module.iam.lambda_role_arn  # Reference the IAM role ARN output
-  table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name output
+  function_name = "insert_data_lambda"
+  role_arn      = module.iam.lambda_role_arn
+  table_name    = module.dynamodb.table_name
 }
 
 # Second Lambda: Read Data Lambda
 module "read_data_lambda" {
   source        = "./modules/lambda"
-  function_name = "read_data_lambda"  # Provide the function name for the read data Lambda
-  role_arn      = module.iam.lambda_role_arn  # Reference the IAM role ARN output
-  table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name output
+  function_name = "read_data_lambda"
+  role_arn      = module.iam.lambda_role_arn
+  table_name    = module.dynamodb.table_name
 }
 
 module "api_gateway" {
-  source = "./modules/api_gateway"
+  source              = "./modules/api_gateway"
+  read_data_lambda_arn = module.read_data_lambda.lambda_function_arn  # Pass the ARN to API Gateway
+  insert_data_lambda_arn = module.insert_data_lambda.lambda_function_arn  # Pass the ARN to API Gateway
 }
