@@ -56,6 +56,3 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   stage_name  = "prod"
 }
 
-output "api_url" {
-  value = aws_api_gateway_deployment.api_deployment.invoke_url
-}
