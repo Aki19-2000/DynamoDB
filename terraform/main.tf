@@ -13,7 +13,7 @@ module "insert_data_lambda" {
   source        = "./modules/lambda"
   function_name = "insert_data_lambda"  # Provide the function name for the insert data Lambda
   role_arn      = module.iam.lambda_role_arn  # Reference the IAM role ARN output
-  table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name
+  table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name output
 }
 
 # Second Lambda: Read Data Lambda
@@ -21,7 +21,7 @@ module "read_data_lambda" {
   source        = "./modules/lambda"
   function_name = "read_data_lambda"  # Provide the function name for the read data Lambda
   role_arn      = module.iam.lambda_role_arn  # Reference the IAM role ARN output
-  table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name
+  table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name output
 }
 
 module "api_gateway" {
