@@ -18,6 +18,10 @@ jobs:
       with:
         terraform_version: "1.3.0"  # Adjust the version as needed
 
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform  # Specify the directory
+
     # Install Terraform dependencies (tflint and checkov)
     - name: Install tflint
       run: |
@@ -30,11 +34,6 @@ jobs:
     # Run Terraform fmt to ensure the code is properly formatted
     - name: Run Terraform fmt
       run: terraform fmt 
-      working-directory: ./terraform  # Specify the directory
-
-    # Initialize Terraform (this will download the provider and modules)
-    - name: Terraform Init
-      run: terraform init
       working-directory: ./terraform  # Specify the directory
 
     # Run Terraform validate to ensure the configuration is valid
