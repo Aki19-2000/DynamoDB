@@ -5,8 +5,7 @@ module "dynamodb" {
 }
 
 module "iam" {
-  source      = "./modules/iam"
-  table_name  = module.dynamodb.table_name  # Pass the DynamoDB table name
+  source = "./modules/iam"
 }
 
 # First Lambda: Insert Data Lambda
@@ -27,6 +26,6 @@ module "read_data_lambda" {
 
 module "api_gateway" {
   source              = "./modules/api_gateway"
-  read_data_lambda_arn = module.read_data_lambda.lambda_function_arn  # Pass the ARN to API Gateway
-  insert_data_lambda_arn = module.insert_data_lambda.lambda_function_arn  # Pass the ARN to API Gateway
+  read_data_lambda_arn = module.read_data_lambda.read_data_lambda_arn  # Reference the output ARN
+  insert_data_lambda_arn = module.insert_data_lambda.insert_data_lambda_arn  # Reference the output ARN
 }
