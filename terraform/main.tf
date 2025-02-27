@@ -14,8 +14,12 @@ module "iam" {
 }
 
 module "lambda" {
-  source = "./modules/lambda"
+  source      = "./modules/lambda"
+  function_name = "my_lambda_function"  # Provide the Lambda function name
+  role_arn     = "arn:aws:iam::123456789012:role/my-lambda-role"  # Provide the IAM role ARN for Lambda
+  table_name   = "serverless_workshop_intro"  # Provide the DynamoDB table name
 }
+
 
 module "api_gateway" {
   source = "./modules/api_gateway"
