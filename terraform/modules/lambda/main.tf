@@ -1,21 +1,13 @@
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}"
-  output_path = "${path.module}/lambda_function.zip"
-}
-
-resource "aws_lambda_function" "lambda_function" {
-  function_name    = var.function_name
-  runtime         = "python3.9"
-  handler         = "lambda_function.lambda_handler"
-  role            = var.role_arn
-  filename        = data.archive_file.lambda_zip.output_path
-
-  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+resource "aws_lambda_function" "insert_data_lambda" {
+  function_name = "insert_data_lambda"
+  role          = aws_iam_role.lambda_dynamodb_role.arn
+  handler       = "index.lambda_handler"
+  runtime       = "python3.8"
+  filename      = "lambda_functions/insert_data.zip"  # Your zipped lambda file
 
   environment {
     variables = {
-      TABLE_NAME = var.table_name
+      TABLE_NAME = aws_dynamodb_table.serverless_workshop_intro.name
     }
   }
 }
