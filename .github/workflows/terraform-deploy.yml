@@ -1,7 +1,7 @@
 name: Terraform Deployment Workflow
 
 on:
- workflow_dispatch:
+  workflow_dispatch:  # Allows manual triggering of the workflow
 
 jobs:
   terraform:
@@ -16,7 +16,7 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: "1.3.0"  # You can adjust the version as needed
+        terraform_version: "1.3.0"  # Adjust the version as needed
 
     # Install Terraform dependencies (tflint and checkov)
     - name: Install tflint
@@ -30,39 +30,47 @@ jobs:
     # Run Terraform fmt to ensure the code is properly formatted
     - name: Run Terraform fmt
       run: terraform fmt -check -diff
+      working-directory: ./terraform  # Specify the directory
 
     # Run Terraform validate to ensure the configuration is valid
     - name: Run Terraform validate
       run: terraform validate
+      working-directory: ./terraform  # Specify the directory
 
     # Run tflint using custom configurations
     - name: Run tflint with custom config
       run: tflint --config .tflint.hcl
+      working-directory: ./terraform  # Specify the directory
 
     # Run Checkov to scan for security misconfigurations
     - name: Run Checkov
       run: checkov -d .
+      working-directory: ./terraform  # Specify the directory
 
     # Set up AWS credentials using OIDC authentication (configure AWS CLI with your IAM role)
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::<AWS_ACCOUNT_ID>:role/OIDC-GitHub  # Replace with your actual role ARN
+        role-to-assume: arn:aws:iam::510278866235:role/OIDC-GitHUb  # Replace with your actual role ARN
         role-session-name: github-actions-session
-        aws-region: us-east-1  # Adjust to your AWS region
+        aws-region: us-east-1  # Adjust to your AWS region (e.g., us-west-2, eu-west-1, etc.)
 
     # Initialize Terraform (this will download the provider and modules)
     - name: Terraform Init
       run: terraform init
+      working-directory: ./terraform  # Specify the directory
 
     # Run Terraform Plan to see what changes will be applied
     - name: Terraform Plan
       run: terraform plan -out=tfplan
+      working-directory: ./terraform  # Specify the directory
 
     # Apply the Terraform changes (requires approval if you're using 'auto-approve')
     - name: Terraform Apply
       run: terraform apply -auto-approve
+      working-directory: ./terraform  # Specify the directory
 
     # Output the API URL (if relevant)
     - name: Output API URL
-      run: echo "Deployed API URL: $(terraform output -raw api_url)"
+      run: echo "Deployed API URL: $(terraform output -raw api_url)"  # Ensure api_url output exists in your Terraform config
+      working-directory: ./terraform  # Specify the directory
