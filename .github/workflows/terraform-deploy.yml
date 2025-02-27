@@ -1,7 +1,7 @@
 name: Terraform Deployment Workflow
 
 on:
-  workflow_dispatch:
+ workflow_dispatch:
 
 jobs:
   terraform:
@@ -42,6 +42,14 @@ jobs:
     # Run Checkov to scan for security misconfigurations
     - name: Run Checkov
       run: checkov -d .
+
+    # Set up AWS credentials using OIDC authentication (configure AWS CLI with your IAM role)
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::<AWS_ACCOUNT_ID>:role/OIDC-GitHub  # Replace with your actual role ARN
+        role-session-name: github-actions-session
+        aws-region: us-east-1  # Adjust to your AWS region
 
     # Initialize Terraform (this will download the provider and modules)
     - name: Terraform Init
