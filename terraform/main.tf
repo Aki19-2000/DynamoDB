@@ -6,7 +6,9 @@ module "dynamodb" {
 
 module "iam" {
   source      = "./modules/iam"
-  table_name  = module.dynamodb.table_name  # Pass DynamoDB table name to IAM
+  region      = "us-east-1"  # Pass the region
+  account_id  = "<YOUR_AWS_ACCOUNT_ID>"  # Pass your AWS account ID
+  table_name  = module.dynamodb.table_name
 }
 
 # First Lambda: Insert Data Lambda
