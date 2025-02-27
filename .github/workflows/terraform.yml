@@ -32,6 +32,11 @@ jobs:
       run: terraform fmt -check -diff
       working-directory: ./terraform  # Specify the directory
 
+    # Initialize Terraform (this will download the provider and modules)
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform  # Specify the directory
+
     # Run Terraform validate to ensure the configuration is valid
     - name: Run Terraform validate
       run: terraform validate
@@ -51,14 +56,9 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::510278866235:role/OIDC-GitHUb  # Replace with your actual role ARN
+        role-to-assume: arn:aws:iam::510278866235:role/OIDC-GitHub  # Replace with your actual role ARN
         role-session-name: github-actions-session
         aws-region: us-east-1  # Adjust to your AWS region (e.g., us-west-2, eu-west-1, etc.)
-
-    # Initialize Terraform (this will download the provider and modules)
-    - name: Terraform Init
-      run: terraform init
-      working-directory: ./terraform  # Specify the directory
 
     # Run Terraform Plan to see what changes will be applied
     - name: Terraform Plan
