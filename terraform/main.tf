@@ -7,7 +7,7 @@ module "dynamodb" {
 module "iam" {
   source      = "./modules/iam"
   region      = "us-east-1"  # Pass the region
-  account_id  = "<YOUR_AWS_ACCOUNT_ID>"  # Pass your AWS account ID
+  account_id  = "510278866235"  # Pass your AWS account ID
   table_name  = module.dynamodb.table_name
 }
 
