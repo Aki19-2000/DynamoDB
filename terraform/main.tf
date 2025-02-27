@@ -10,9 +10,12 @@ module "iam" {
 
 module "lambda" {
   source        = "./modules/lambda"
-  function_name = "my_lambda_function"  # Provide the Lambda function name
+  function_name = "insert_data_lambda"  # Provide the function name for the insert data Lambda
   role_arn      = module.iam.lambda_role_arn  # Reference the IAM role ARN output
   table_name    = module.dynamodb.table_name  # Reference the DynamoDB table name
+  
+  # You can add another module or override this to create another Lambda for reading
+  function_name = "read_data_lambda"  # Provide the function name for the read data Lambda
 }
 
 module "api_gateway" {
