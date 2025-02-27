@@ -5,8 +5,11 @@ module "dynamodb" {
 }
 
 module "iam" {
-  source = "./modules/iam"
+  source      = "./modules/iam"
+  region      = "us-east-1"  # Pass the region
+  account_id  = "510278866235"  # Replace with your AWS account ID
 }
+
 
 # First Lambda: Insert Data Lambda
 module "insert_data_lambda" {
