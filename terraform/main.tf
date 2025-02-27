@@ -1,15 +1,13 @@
 module "dynamodb" {
   source      = "./modules/dynamodb"
-  table_name  = "serverless_workshop_intro"  # Provide the table name here
-  hash_key    = "Userid"                     # Provide the hash key here
+  table_name  = "serverless_workshop_intro"
+  hash_key    = "Userid"
 }
 
 module "iam" {
   source      = "./modules/iam"
-  region      = "us-east-1"  # Pass the region
-  account_id  = "510278866235"  # Replace with your AWS account ID
+  table_name  = module.dynamodb.table_name  # Pass DynamoDB table name to IAM
 }
-
 
 # First Lambda: Insert Data Lambda
 module "insert_data_lambda" {
@@ -29,6 +27,6 @@ module "read_data_lambda" {
 
 module "api_gateway" {
   source              = "./modules/api_gateway"
-  read_data_lambda_arn = module.read_data_lambda.read_data_lambda_arn  # Reference the output ARN
-  insert_data_lambda_arn = module.insert_data_lambda.insert_data_lambda_arn  # Reference the output ARN
+  read_data_lambda_arn = module.read_data_lambda.read_data_lambda_arn  # Pass Lambda ARN to API Gateway
+  insert_data_lambda_arn = module.insert_data_lambda.insert_data_lambda_arn  # Pass Lambda ARN to API Gateway
 }
