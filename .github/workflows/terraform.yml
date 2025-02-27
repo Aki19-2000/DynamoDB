@@ -51,7 +51,7 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::123456789012:role/OIDC-GitHub  # Replace with your actual role ARN
+        role-to-assume: arn:aws:iam::510278866235:role/OIDC-GitHUb  # Replace with your actual role ARN
         role-session-name: github-actions-session
         aws-region: us-east-1  # Adjust to your AWS region (e.g., us-west-2, eu-west-1, etc.)
 
