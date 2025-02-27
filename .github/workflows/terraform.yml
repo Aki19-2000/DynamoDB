@@ -51,7 +51,7 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::510278866235:role/OIDC-GitHUb  # Replace with your actual role ARN
+        role-to-assume: arn:aws:iam::123456789012:role/OIDC-GitHub  # Replace with your actual role ARN
         role-session-name: github-actions-session
         aws-region: us-east-1  # Adjust to your AWS region (e.g., us-west-2, eu-west-1, etc.)
 
@@ -68,9 +68,4 @@ jobs:
     # Apply the Terraform changes (requires approval if you're using 'auto-approve')
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: ./terraform  # Specify the directory
-
-    # Output the API URL (if relevant)
-    - name: Output API URL
-      run: echo "Deployed API URL: $(terraform output -raw api_url)"  # Ensure api_url output exists in your Terraform config
       working-directory: ./terraform  # Specify the directory
