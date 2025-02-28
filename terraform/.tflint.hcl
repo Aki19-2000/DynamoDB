@@ -32,9 +32,9 @@ rule "aws_api_gateway_method" {
 }
 
 # Exclude certain directories or resources from linting
-exclude = [
-  "modules/lambda/*",   # Exclude Lambda-related resources
-  "modules/api_gateway/*"  # Exclude API Gateway-related resources
+files = [
+  "!modules/lambda/*",  # Exclude Lambda-related resources
+  "!modules/api_gateway/*"  # Exclude API Gateway-related resources
 ]
 
 # Optionally, specify the severity levels for other rules
