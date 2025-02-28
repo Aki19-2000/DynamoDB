@@ -8,11 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the code from the repository
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Set up Terraform
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
       with:
@@ -22,7 +20,6 @@ jobs:
       run: terraform init
       working-directory: ./terraform  # Specify the directory
 
-    # Install Terraform dependencies (tflint and checkov)
     - name: Install tflint
       run: |
         curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
@@ -31,27 +28,26 @@ jobs:
       run: |
         pip install checkov
 
-    # Run Terraform fmt to ensure the code is properly formatted
     - name: Run Terraform fmt
       run: terraform fmt 
       working-directory: ./terraform  # Specify the directory
 
-    # Run Terraform validate to ensure the configuration is valid
     - name: Run Terraform validate
       run: terraform validate
       working-directory: ./terraform  # Specify the directory
 
-    # Run tflint using custom configurations
+    - name: Initialize tflint plugins
+      run: tflint --init
+      working-directory: ./terraform  # Specify the directory
+
     - name: Run tflint with custom config
       run: tflint --config .tflint.hcl
       working-directory: ./terraform  # Specify the directory
 
-    # Run Checkov to scan for security misconfigurations
     - name: Run Checkov
       run: checkov -d .
       working-directory: ./terraform  # Specify the directory
 
-    # Set up AWS credentials using OIDC authentication (configure AWS CLI with your IAM role)
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -59,12 +55,10 @@ jobs:
         role-session-name: github-actions-session
         aws-region: us-east-1  # Adjust to your AWS region (e.g., us-west-2, eu-west-1, etc.)
 
-    # Run Terraform Plan to see what changes will be applied
     - name: Terraform Plan
       run: terraform plan -out=tfplan
       working-directory: ./terraform  # Specify the directory
 
-    # Apply the Terraform changes (requires approval if you're using 'auto-approve')
     - name: Terraform Apply
       run: terraform apply -auto-approve
       working-directory: ./terraform  # Specify the directory
