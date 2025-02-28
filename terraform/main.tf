@@ -17,6 +17,7 @@ module "iam" {
 # First Lambda: Insert Data Lambda
 module "insert_data_lambda" {
   source        = "./modules/lambda"
+  function_name = "insert_data_lambda"
   workspace     = terraform.workspace
   role_arn      = module.iam.lambda_role_arn
   table_name    = module.dynamodb.table_name
@@ -25,6 +26,7 @@ module "insert_data_lambda" {
 # Second Lambda: Read Data Lambda
 module "read_data_lambda" {
   source        = "./modules/lambda"
+  function_name = "read_data_lambda"
   workspace     = terraform.workspace
   role_arn      = module.iam.lambda_role_arn
   table_name    = module.dynamodb.table_name
