@@ -1,20 +1,15 @@
-# Example of updated TFLint configuration
-plugin "aws" {
+# Enable or disable specific rules for AWS Lambda
+rule "aws_lambda_function_timeout" {
   enabled = true
-  version = "v0.25.0"  # Specify the plugin version if needed
+  severity = "error"  # You can set severity to 'error', 'warning', or 'info'
 }
 
-# Example for rule configuration
-rule "aws_instance_invalid_type" {
+rule "aws_lambda_function_memory_size" {
   enabled = true
+  severity = "warning"
 }
 
-rule "aws_security_group_rule_missing_type" {
-  enabled = false  # Disable rule, or enable as needed
+rule "aws_lambda_function_environment_variables" {
+  enabled = true
+  severity = "error"
 }
-
-# Define exclusions for files or directories if needed
-exclude = [
-  "modules/*",  # Example: Exclude all modules from being linted
-  "test/*"      # Example: Exclude test directories
-]
