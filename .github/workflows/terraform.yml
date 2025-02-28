@@ -54,7 +54,7 @@ jobs:
       working-directory: ./terraform  # Specify the directory
 
     - name: Run Checkov
-      run: checkov -d . --output json --soft-fail -o checkov_results.json
+      run: checkov -d . --output json --output-file checkov_results.json
       working-directory: ./terraform  # Specify the directory
 
     - name: Upload Checkov Results
