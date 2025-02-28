@@ -7,6 +7,7 @@ module "dynamodb" {
 module "iam" {
   source      = "./modules/iam"
   table_name  = module.dynamodb.table_name
+  account_id  = "510278866235"  # Replace with your actual AWS account ID
 }
 
 # First Lambda: Insert Data Lambda
