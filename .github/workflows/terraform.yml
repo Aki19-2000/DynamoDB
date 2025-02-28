@@ -58,7 +58,7 @@ jobs:
       working-directory: ./terraform  # Specify the directory
 
     - name: Upload Checkov Results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.6.1
       with:
         name: checkov-results
         path: ./terraform/checkov_results.json
