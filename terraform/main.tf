@@ -1,23 +1,27 @@
+module "dynamodb" {
+  source      = "./modules/dynamodb"  # This line ensures the dynamodb module is correctly referenced
+  table_name  = "serverless_workshop_intro"
+  hash_key    = "Userid"
+}
+
 module "iam" {
   source      = "./modules/iam"
-  table_name  = module.dynamodb.table_name
+  table_name  = module.dynamodb.table_name  # Reference to the dynamodb module's output
   account_id  = "510278866235"  # Replace with your actual AWS account ID
 }
 
 module "insert_data_lambda" {
   source        = "./modules/lambda"
   function_name = "insert_data_lambda"
-  workspace     = terraform.workspace  # Passing the current workspace
   role_arn      = module.iam.lambda_role_arn
-  table_name    = module.dynamodb.table_name
+  table_name    = module.dynamodb.table_name  # Reference to the dynamodb module's output
 }
 
 module "read_data_lambda" {
   source        = "./modules/lambda"
   function_name = "read_data_lambda"
-  workspace     = terraform.workspace  # Passing the current workspace
   role_arn      = module.iam.lambda_role_arn
-  table_name    = module.dynamodb.table_name
+  table_name    = module.dynamodb.table_name  # Reference to the dynamodb module's output
 }
 
 module "api_gateway" {
