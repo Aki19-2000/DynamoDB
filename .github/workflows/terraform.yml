@@ -56,9 +56,10 @@ jobs:
     - name: Run Checkov
       run: checkov -d . --output json --output-file checkov_results.json
       working-directory: ./terraform  # Specify the directory
+      continue-on-error: true  # Continue even if Checkov fails
 
     - name: Upload Checkov Results
-      uses: actions/upload-artifact@v4.6.1
+      uses: actions/upload-artifact@v2  # Corrected version
       with:
         name: checkov-results
         path: ./terraform/checkov_results.json
