@@ -1,6 +1,6 @@
 resource "null_resource" "zip_insert_data_lambda" {
   provisioner "local-exec" {
-    command = "zip ${path.module}/lambda_functions/insert_data.zip ${path.module}/insert_data.py"
+    command = "mkdir -p ${path.module}/lambda_functions && zip ${path.module}/lambda_functions/insert_data.zip ${path.module}/insert_data.py"
   }
 
   triggers = {
@@ -10,7 +10,7 @@ resource "null_resource" "zip_insert_data_lambda" {
 
 resource "null_resource" "zip_read_data_lambda" {
   provisioner "local-exec" {
-    command = "zip ${path.module}/lambda_functions/read_data_lambda.zip ${path.module}/read_data_lambda.py"
+    command = "mkdir -p ${path.module}/lambda_functions && zip ${path.module}/lambda_functions/read_data_lambda.zip ${path.module}/read_data_lambda.py"
   }
 
   triggers = {
