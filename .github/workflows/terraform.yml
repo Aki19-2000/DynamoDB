@@ -36,6 +36,12 @@ jobs:
       run: terraform validate
       working-directory: ./terraform  # Specify the directory
 
+    - name: Install tflint AWS plugin
+      run: |
+        mkdir -p ~/.tflint.d/plugins
+        curl -L https://github.com/terraform-linters/tflint-ruleset-aws/releases/latest/download/tflint-ruleset-aws_linux_amd64.zip -o /tmp/tflint-ruleset-aws.zip
+        unzip /tmp/tflint-ruleset-aws.zip -d ~/.tflint.d/plugins
+
     - name: Initialize tflint plugins
       run: tflint --init
       working-directory: ./terraform  # Specify the directory
