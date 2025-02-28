@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 1.0.0"
+}
+
 module "dynamodb" {
   source      = "./modules/dynamodb"
   table_name  = "serverless_workshop_intro"
@@ -36,7 +40,3 @@ module "api_gateway" {
 output "api_url" {
   value = module.api_gateway.api_url
 }
-
-
-
-
