@@ -1,9 +1,21 @@
+data "archive_file" "insert_data_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/lambda_functions/insert_data"
+  output_path = "${path.module}/lambda_functions/insert_data.zip"
+}
+
+data "archive_file" "read_data_lambda_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/lambda_functions/read_data_lambda"
+  output_path = "${path.module}/lambda_functions/read_data_lambda.zip"
+}
+
 resource "aws_lambda_function" "insert_data_lambda" {
   function_name = var.function_name
   role          = var.role_arn
   handler       = "index.lambda_handler"
   runtime       = "python3.8"
-  filename      = "lambda/lambda_functions/insert_data.zip"  # Corrected path to the zip file
+  filename      = data.archive_file.insert_data_zip.output_path
 
   environment {
     variables = {
@@ -17,7 +29,7 @@ resource "aws_lambda_function" "read_data_lambda" {
   role          = var.role_arn
   handler       = "index.lambda_handler"
   runtime       = "python3.8"
-  filename      = "lambda/lambda_functions/read_data_lambda.zip"  # Corrected path to the zip file
+  filename      = data.archive_file.read_data_lambda_zip.output_path
 
   environment {
     variables = {
