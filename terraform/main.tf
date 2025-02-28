@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 1.0.0"  # Define the required Terraform version
+}
+
 module "dynamodb" {
   source      = "./modules/dynamodb"  # This line ensures the dynamodb module is correctly referenced
   table_name  = "serverless_workshop_intro"
