@@ -1,23 +1,3 @@
-resource "null_resource" "zip_insert_data_lambda" {
-  provisioner "local-exec" {
-    command = "mkdir -p ${path.module}/lambda_functions && zip ${path.module}/lambda_functions/insert_data.zip ${path.module}/insert_data.py"
-  }
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-}
-
-resource "null_resource" "zip_read_data_lambda" {
-  provisioner "local-exec" {
-    command = "mkdir -p ${path.module}/lambda_functions && zip ${path.module}/lambda_functions/read_data_lambda.zip ${path.module}/read_data_lambda.py"
-  }
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-}
-
 resource "aws_lambda_function" "insert_data_lambda" {
   function_name = var.function_name
   role          = var.role_arn
@@ -30,10 +10,6 @@ resource "aws_lambda_function" "insert_data_lambda" {
       TABLE_NAME = var.table_name
     }
   }
-
-  depends_on = [
-    null_resource.zip_insert_data_lambda
-  ]
 }
 
 resource "aws_lambda_function" "read_data_lambda" {
@@ -48,8 +24,4 @@ resource "aws_lambda_function" "read_data_lambda" {
       TABLE_NAME = var.table_name
     }
   }
-
-  depends_on = [
-    null_resource.zip_read_data_lambda
-  ]
 }
