@@ -11,7 +11,7 @@ data "archive_file" "read_data_lambda_zip" {
 }
 
 resource "aws_lambda_function" "insert_data_lambda" {
-  function_name = var.function_name
+  function_name = "insert_data_lambda-${var.workspace}"
   role          = var.role_arn
   handler       = "index.lambda_handler"
   runtime       = "python3.8"
@@ -36,7 +36,7 @@ resource "aws_lambda_function" "insert_data_lambda" {
 }
 
 resource "aws_lambda_function" "read_data_lambda" {
-  function_name = var.function_name
+  function_name = "read_data_lambda-${var.workspace}"
   role          = var.role_arn
   handler       = "index.lambda_handler"
   runtime       = "python3.8"
