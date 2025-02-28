@@ -28,6 +28,9 @@ jobs:
       run: |
         pip install checkov
 
+    - name: Verify Checkov Installation
+      run: checkov --version
+
     - name: Run Terraform fmt
       run: terraform fmt 
       working-directory: ./terraform  # Specify the directory
@@ -51,8 +54,13 @@ jobs:
       working-directory: ./terraform  # Specify the directory
 
     - name: Run Checkov
-      run: checkov -d .
+      id: checkov
+      run: checkov -d . --output json
       working-directory: ./terraform  # Specify the directory
+
+    - name: Check Checkov Results
+      if: steps.checkov.outcome == 'failure'
+      run: echo "Checkov found issues. Please review the output."
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
