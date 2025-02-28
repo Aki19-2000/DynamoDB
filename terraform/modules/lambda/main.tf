@@ -1,6 +1,6 @@
 resource "null_resource" "zip_insert_data_lambda" {
   provisioner "local-exec" {
-    command = "zip terraform/modules/lambda/lambda_functions/insert_data.zip terraform/modules/lambda/insert_data.py"
+    command = "zip ${path.module}/lambda_functions/insert_data.zip ${path.module}/insert_data.py"
   }
 
   triggers = {
@@ -10,7 +10,7 @@ resource "null_resource" "zip_insert_data_lambda" {
 
 resource "null_resource" "zip_read_data_lambda" {
   provisioner "local-exec" {
-    command = "zip terraform/modules/lambda/lambda_functions/read_data_lambda.zip terraform/modules/lambda/read_data_lambda.py"
+    command = "zip ${path.module}/lambda_functions/read_data_lambda.zip ${path.module}/read_data_lambda.py"
   }
 
   triggers = {
