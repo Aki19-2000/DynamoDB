@@ -53,7 +53,12 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_integration.insert_data_integration
   ]
   rest_api_id = aws_api_gateway_rest_api.serverless_api.id
-  stage_name  = "prod"
+}
+
+resource "aws_api_gateway_stage" "prod_stage" {
+  stage_name    = "prod"
+  rest_api_id   = aws_api_gateway_rest_api.serverless_api.id
+  deployment_id = aws_api_gateway_deployment.api_deployment.id
 }
 
 
