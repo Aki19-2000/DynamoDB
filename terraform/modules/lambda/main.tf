@@ -3,7 +3,7 @@ resource "aws_lambda_function" "insert_data_lambda" {
   role          = var.role_arn
   handler       = "index.lambda_handler"
   runtime       = "python3.8"
-  filename      = "terraform/modules/lambda/lambda_functions/insert_data.zip"  # Path to the zip file
+  filename      = "lambda/lambda_functions/insert_data.zip"  # Corrected path to the zip file
 
   environment {
     variables = {
@@ -17,7 +17,7 @@ resource "aws_lambda_function" "read_data_lambda" {
   role          = var.role_arn
   handler       = "index.lambda_handler"
   runtime       = "python3.8"
-  filename      = "terraform/modules/lambda/lambda_functions/read_data_lambda.zip"  # Path to the zip file
+  filename      = "lambda/lambda_functions/read_data_lambda.zip"  # Corrected path to the zip file
 
   environment {
     variables = {
