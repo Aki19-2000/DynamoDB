@@ -7,14 +7,16 @@ module "iam" {
 module "insert_data_lambda" {
   source        = "./modules/lambda"
   function_name = "insert_data_lambda"
-  role_arn      = module.iam.lambda_role_arn  # IAM role ARN from the IAM module
+  workspace     = terraform.workspace  # Passing the current workspace
+  role_arn      = module.iam.lambda_role_arn
   table_name    = module.dynamodb.table_name
 }
 
 module "read_data_lambda" {
   source        = "./modules/lambda"
   function_name = "read_data_lambda"
-  role_arn      = module.iam.lambda_role_arn  # IAM role ARN from the IAM module
+  workspace     = terraform.workspace  # Passing the current workspace
+  role_arn      = module.iam.lambda_role_arn
   table_name    = module.dynamodb.table_name
 }
 
