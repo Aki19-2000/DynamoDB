@@ -13,17 +13,18 @@ module "iam" {
 module "insert_data_lambda" {
   source        = "./modules/lambda"
   function_name = "insert_data_lambda"
+  workspace     = terraform.workspace  # Pass the current workspace
   role_arn      = module.iam.lambda_role_arn
-  table_name    = module.dynamodb.table_name  # Reference to the dynamodb module's output
+  table_name    = module.dynamodb.table_name
 }
 
 module "read_data_lambda" {
   source        = "./modules/lambda"
   function_name = "read_data_lambda"
+  workspace     = terraform.workspace  # Pass the current workspace
   role_arn      = module.iam.lambda_role_arn
-  table_name    = module.dynamodb.table_name  # Reference to the dynamodb module's output
+  table_name    = module.dynamodb.table_name
 }
-
 module "api_gateway" {
   source                 = "./modules/api_gateway"
   read_data_lambda_arn   = module.read_data_lambda.read_data_lambda_arn
