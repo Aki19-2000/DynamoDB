@@ -33,5 +33,10 @@ module "api_gateway" {
   region              = "us-east-1"  # Pass the region
 }
 
+output "api_url" {
+  value = module.api_gateway.api_url
+}
+
+
 
 
