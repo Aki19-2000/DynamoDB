@@ -22,6 +22,17 @@ resource "aws_lambda_function" "insert_data_lambda" {
       TABLE_NAME = var.table_name
     }
   }
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [
+      function_name,
+      role,
+      handler,
+      runtime,
+      filename,
+    ]
+  }
 }
 
 resource "aws_lambda_function" "read_data_lambda" {
@@ -35,5 +46,16 @@ resource "aws_lambda_function" "read_data_lambda" {
     variables = {
       TABLE_NAME = var.table_name
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [
+      function_name,
+      role,
+      handler,
+      runtime,
+      filename,
+    ]
   }
 }
