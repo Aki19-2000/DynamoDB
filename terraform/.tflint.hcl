@@ -1,7 +1,7 @@
 # Enable AWS plugin for TFLint
 plugin "aws" {
   enabled = true  # This argument is required
-  source  = "terraform-linters/tflint-ruleset-aws"  # Specify the source for the AWS plugin
+  source  = "terraform-linters/tflint-ruleset-aws"  # Correct source format
   version = "v0.25.0"  # Specify the plugin version
 }
 
