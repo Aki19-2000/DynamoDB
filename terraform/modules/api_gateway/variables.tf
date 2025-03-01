@@ -1,5 +1,10 @@
-variable "lambda_function_name" {
-  description = "The name of the Lambda function"
+variable "read_data_lambda_arn" {
+  description = "ARN for the Read Data Lambda function"
+  type        = string
+}
+
+variable "insert_data_lambda_arn" {
+  description = "ARN for the Insert Data Lambda function"
   type        = string
 }
 
@@ -10,15 +15,5 @@ variable "api_stage" {
 
 variable "region" {
   description = "The AWS region"
-  type        = string
-}
-
-variable "read_data_lambda_arn" {
-  description = "ARN for the Read Data Lambda function"
-  type        = string
-}
-
-variable "insert_data_lambda_arn" {
-  description = "ARN for the Insert Data Lambda function"
   type        = string
 }
