@@ -6,8 +6,8 @@ data "archive_file" "insert_data_zip" {
 
 data "archive_file" "read_data_lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/lambda_functions/read_data_lambda"
-  output_path = "${path.module}/lambda_functions/read_data_lambda.zip"
+  source_dir  = "${path.module}/lambda_functions1/read_data_lambda"
+  output_path = "${path.module}/lambda_functions1/read_data_lambda.zip"
 }
 
 resource "aws_lambda_function" "insert_data_lambda" {
