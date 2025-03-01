@@ -42,8 +42,8 @@ module "api_gateway" {
   source                 = "./modules/api_gateway"
   api_stage              = "prod"  # Stage name (e.g., prod)
   region                 = "us-east-1"  # AWS region
-  read_data_lambda_arn   = module.read_data_lambda.read_data_lambda_arn  # ARN of read data lambda
-  insert_data_lambda_arn = module.insert_data_lambda.insert_data_lambda_arn  # ARN of insert data lambda
+  read_data_lambda_arn   = module.read_data_lambda.lambda_arn  # ARN of read data lambda
+  insert_data_lambda_arn = module.insert_data_lambda.lambda_arn  # ARN of insert data lambda
   read_data_lambda_name  = module.read_data_lambda.function_name  # Name of read data lambda
   insert_data_lambda_name = module.insert_data_lambda.function_name  # Name of insert data lambda
 }
