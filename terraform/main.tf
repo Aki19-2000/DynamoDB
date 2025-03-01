@@ -9,11 +9,13 @@ module "dynamodb" {
 }
 
 module "iam" {
-  source             = "./modules/iam"
-  table_name         = module.dynamodb.table_name  # Reference to the dynamodb module's output
-  account_id         = "510278866235"  # Replace with your actual AWS account ID
-  lambda_function_name_1 = "insert_data_lambda"  # First Lambda function name
-  lambda_function_name_2 = "read_data"     # Second Lambda function name
+  source = "./modules/iam"
+  lambda_function_name = "insert_data_lambda"
+}
+
+module "iam" {
+  source = "./modules/iam1"
+  lambda_function_name = "read_data"
 }
 
 module "insert_data_lambda" {
