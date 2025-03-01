@@ -4,7 +4,7 @@ data "archive_file" "read_data_zip" {
   output_path = "${path.module}/lambda_functions1/read_data.zip"
 }
 
-resource "aws_lambda_function" "read_data_lambda" {
+resource "aws_lambda_function" "read_data" {
   function_name = var.function_name
   role          = var.role_arn
   handler       = "index.lambda_handler"
