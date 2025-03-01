@@ -35,7 +35,7 @@ resource "aws_api_gateway_integration" "insert_integration" {
   http_method = aws_api_gateway_method.insert_method.http_method
   type        = "AWS_PROXY"
   integration_http_method = "POST"
-  uri         = aws_lambda_function.insert_data_lambda.invoke_arn
+  uri         = var.insert_data_lambda_arn
 }
 
 resource "aws_api_gateway_integration" "read_integration" {
@@ -44,13 +44,13 @@ resource "aws_api_gateway_integration" "read_integration" {
   http_method = aws_api_gateway_method.read_method.http_method
   type        = "AWS_PROXY"
   integration_http_method = "POST"
-  uri         = aws_lambda_function.read_data.invoke_arn
+  uri         = var.read_data_lambda_arn
 }
 
 resource "aws_lambda_permission" "api_gateway_insert" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.insert_data_lambda.function_name
+  function_name = var.insert_data_lambda_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
 }
@@ -58,21 +58,9 @@ resource "aws_lambda_permission" "api_gateway_insert" {
 resource "aws_lambda_permission" "api_gateway_read" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.read_data.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
-}
-
-resource "aws_lambda_permission" "insert_data_permission" {
-  action        = "lambda:InvokeFunction"
-  function_name = var.insert_data_lambda_name
-  principal     = "apigateway.amazonaws.com"
-}
-
-resource "aws_lambda_permission" "read_data_permission" {
-  action        = "lambda:InvokeFunction"
   function_name = var.read_data_lambda_name
   principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
 }
 
 resource "aws_api_gateway_deployment" "api_deployment" {
@@ -81,5 +69,9 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_integration.read_integration
   ]
   rest_api_id = aws_api_gateway_rest_api.api.id
-  stage_name  = "prod"
+  stage_name  = var.api_stage
+}
+
+output "api_url" {
+  value = "${aws_api_gateway_deployment.api_deployment.invoke_url}/${var.api_stage}"
 }
