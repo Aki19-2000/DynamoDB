@@ -26,7 +26,7 @@ resource "aws_api_gateway_integration" "get_integration" {
   http_method             = aws_api_gateway_method.get_method.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.read_data.arn}/invocations"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.read_data_lambda_arn}/invocations"
 }
 
 # Create a resource path for '/insert_data'
@@ -51,19 +51,19 @@ resource "aws_api_gateway_integration" "post_integration" {
   http_method             = aws_api_gateway_method.post_method.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.insert_data.arn}/invocations"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.insert_data_lambda_arn}/invocations"
 }
 
 # Lambda permissions for API Gateway to invoke the Lambda function
 resource "aws_lambda_permission" "read_data_permission" {
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.read_data.function_name
+  function_name = var.read_data_lambda_name
   principal     = "apigateway.amazonaws.com"
 }
 
 resource "aws_lambda_permission" "insert_data_permission" {
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.insert_data.function_name
+  function_name = var.insert_data_lambda_name
   principal     = "apigateway.amazonaws.com"
 }
 
@@ -80,4 +80,7 @@ resource "aws_api_gateway_deployment" "this" {
   ]
 }
 
-
+# Output the API Gateway URL (optional)
+output "api_url" {
+  value = "https://${aws_api_gateway_rest_api.this.id}.execute-api.${var.region}.amazonaws.com/${var.api_stage}/"
+}
