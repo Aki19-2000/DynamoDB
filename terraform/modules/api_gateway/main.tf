@@ -80,7 +80,4 @@ resource "aws_api_gateway_deployment" "this" {
   ]
 }
 
-# Output the API Gateway URL (optional)
-output "api_url" {
-  value = "https://${aws_api_gateway_rest_api.this.id}.execute-api.${var.region}.amazonaws.com/${var.api_stage}/"
-}
+
