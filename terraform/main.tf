@@ -13,7 +13,7 @@ module "iam" {
   lambda_function_name = "insert_data_lambda"
 }
 
-module "iam" {
+module "iam1" {
   source = "./modules/iam1"
   lambda_function_name = "read_data"
 }
