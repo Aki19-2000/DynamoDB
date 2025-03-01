@@ -1,3 +1,3 @@
 output "api_url" {
-  value = "https://${aws_api_gateway_rest_api.this.id}.execute-api.${var.region}.amazonaws.com/${var.api_stage}/"
+  value = "${aws_api_gateway_deployment.api_deployment.invoke_url}/prod"
 }
