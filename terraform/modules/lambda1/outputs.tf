@@ -1,3 +1,3 @@
-output "read_data_lambda_arn" {
-  value = aws_lambda_function.read_data.arn
+output "function_name" {
+  value = aws_lambda_function.read_data.function_name
 }
