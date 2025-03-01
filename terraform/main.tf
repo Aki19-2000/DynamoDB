@@ -40,7 +40,7 @@ module "read_data_lambda" {
 
 module "api_gateway" {
   source                 = "./modules/api_gateway"
-  lambda_function_name   = "read_data_lambda"  # Name for read data function
+  lambda_function_name   = "insert_data_lambda"  # Name for insert data function
   api_stage              = "prod"  # Stage name here (e.g., prod)
   region                 = "us-east-1"  # AWS region
   read_data_lambda_arn   = module.read_data_lambda.read_data_lambda_arn  # ARN of read data lambda
