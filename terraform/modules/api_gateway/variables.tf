@@ -17,3 +17,9 @@ variable "region" {
   description = "The AWS region"
   type        = string
 }
+
+variable "api_name" {
+  description = "The name of the API Gateway"
+  type        = string
+  default     = "MyAPIGateway"
+}
