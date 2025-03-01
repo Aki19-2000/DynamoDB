@@ -23,7 +23,7 @@ module "insert_data_lambda" {
 }
 
 module "read_data_lambda" {
-  source        = "./modules/lambda"
+  source        = "./modules/lambda1"
   function_name = "read_data_lambda"
   workspace     = terraform.workspace  # Pass the current workspace
   role_arn      = module.iam.lambda_role_arn
