@@ -26,7 +26,8 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
         Action   = [
           "dynamodb:PutItem",
           "dynamodb:Scan",
-          "dynamodb:GetItem"
+          "dynamodb:GetItem",
+          "dynamodb:BatchWriteItem"  # Added permission for BatchWriteItem
         ]
         Effect   = "Allow"
         Resource = "arn:aws:dynamodb:${var.region}:${var.account_id}:table/${var.table_name}"
@@ -34,6 +35,7 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
     ]
   })
 }
+
 
 resource "aws_iam_role_policy_attachment" "lambda_dynamodb_policy_attachment" {
   role       = aws_iam_role.lambda_dynamodb_role.name
