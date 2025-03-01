@@ -10,12 +10,16 @@ module "dynamodb" {
 
 module "iam" {
   source = "./modules/iam"
+  table_name  = module.dynamodb.table_name
+  account_id  = "510278866235"
   lambda_function_name = "insert_data_lambda"
 }
 
 module "iam1" {
   source = "./modules/iam1"
   lambda_function_name = "read_data"
+  table_name  = module.dynamodb.table_name
+  account_id  = "510278866235"
 }
 
 module "insert_data_lambda" {
