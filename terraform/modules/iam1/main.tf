@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_dynamodb_role" {
-  name = "lambda_dynamodb_role"
+  name = "lambda_dynamodb_role_read"  # Ensure the role name is unique
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -16,7 +16,7 @@ resource "aws_iam_role" "lambda_dynamodb_role" {
 }
 
 resource "aws_iam_policy" "lambda_dynamodb_policy" {
-  name        = "lambda_dynamodb_policy"
+  name        = "lambda_dynamodb_policy_read"  # Ensure the policy name is unique
   description = "Policy to allow Lambda to interact with DynamoDB"
 
   policy = jsonencode({
@@ -27,7 +27,7 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
           "dynamodb:PutItem",
           "dynamodb:Scan",
           "dynamodb:GetItem",
-          "dynamodb:BatchWriteItem"  # Added permission for BatchWriteItem
+          "dynamodb:BatchWriteItem"
         ]
         Effect   = "Allow"
         Resource = "arn:aws:dynamodb:${var.region}:${var.account_id}:table/${var.table_name}"
@@ -35,7 +35,6 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
     ]
   })
 }
-
 
 resource "aws_iam_role_policy_attachment" "lambda_dynamodb_policy_attachment" {
   role       = aws_iam_role.lambda_dynamodb_role.name
