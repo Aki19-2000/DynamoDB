@@ -1,77 +1,82 @@
-resource "aws_api_gateway_rest_api" "api" {
-  name        = var.api_name
-  description = "API Gateway for Lambda functions"
+resource "aws_api_gateway_rest_api" "this" {
+  name        = "${var.read_data_lambda_arn}-api"
+  description = "API Gateway to trigger ${var.read_data_lambda_arn}"
 }
 
-resource "aws_api_gateway_resource" "insert_resource" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-  path_part   = "insert"
+resource "aws_api_gateway_resource" "read_data" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_rest_api.this.root_resource_id
+  path_part   = "read_data"
 }
 
-resource "aws_api_gateway_resource" "read_resource" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-  path_part   = "read"
-}
-
-resource "aws_api_gateway_method" "insert_method" {
-  rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.insert_resource.id
-  http_method   = "POST"
-  authorization = "NONE"
-}
-
-resource "aws_api_gateway_method" "read_method" {
-  rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.read_resource.id
+resource "aws_api_gateway_method" "get_method" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.read_data.id
   http_method   = "GET"
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "insert_integration" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.insert_resource.id
-  http_method = aws_api_gateway_method.insert_method.http_method
-  type        = "AWS_PROXY"
+resource "aws_api_gateway_integration" "get_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.this.id
+  resource_id             = aws_api_gateway_resource.read_data.id
+  http_method             = aws_api_gateway_method.get_method.http_method
   integration_http_method = "POST"
-  uri         = var.insert_data_lambda_arn
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.read_data_lambda_arn}/invocations"
 }
 
-resource "aws_api_gateway_integration" "read_integration" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.read_resource.id
-  http_method = aws_api_gateway_method.read_method.http_method
-  type        = "AWS_PROXY"
+resource "aws_api_gateway_resource" "insert_data" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_rest_api.this.root_resource_id
+  path_part   = "insert_data"
+}
+
+resource "aws_api_gateway_method" "post_method" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.insert_data.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "post_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.this.id
+  resource_id             = aws_api_gateway_resource.insert_data.id
+  http_method             = aws_api_gateway_method.post_method.http_method
   integration_http_method = "POST"
-  uri         = var.read_data_lambda_arn
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.insert_data_lambda_arn}/invocations"
 }
 
-resource "aws_lambda_permission" "api_gateway_insert" {
-  statement_id  = "AllowAPIGatewayInvoke"
+resource "aws_lambda_permission" "read_data_permission" {
   action        = "lambda:InvokeFunction"
-  function_name = var.insert_data_lambda_name
+  function_name = var.read_data_lambda_arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
 }
 
-resource "aws_lambda_permission" "api_gateway_read" {
-  statement_id  = "AllowAPIGatewayInvoke"
+resource "aws_lambda_permission" "insert_data_permission" {
   action        = "lambda:InvokeFunction"
-  function_name = var.read_data_lambda_name
+  function_name = var.insert_data_lambda_arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
 }
 
-resource "aws_api_gateway_deployment" "api_deployment" {
+resource "aws_api_gateway_deployment" "this" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  stage_name  = "prod"
+
   depends_on = [
-    aws_api_gateway_integration.insert_integration,
-    aws_api_gateway_integration.read_integration
+    aws_api_gateway_integration.get_integration,
+    aws_api_gateway_method.get_method,
+    aws_api_gateway_integration.post_integration,
+    aws_api_gateway_method.post_method
   ]
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  stage_name  = var.api_stage
+}
+
+resource "aws_api_gateway_stage" "prod_stage" {
+  stage_name    = "prod"
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  deployment_id = aws_api_gateway_deployment.this.id
 }
 
 output "api_url" {
-  value = "${aws_api_gateway_deployment.api_deployment.invoke_url}/${var.api_stage}"
+  value = "https://${aws_api_gateway_rest_api.this.id}.execute-api.${var.region}.amazonaws.com/${var.api_stage}/"
 }
