@@ -49,8 +49,11 @@ jobs:
       run: tflint --init
       working-directory: ./terraform  # Specify the directory
 
+    - name: List tflint plugins
+      run: ls -la ~/.tflint.d/plugins
+
     - name: Run tflint with custom config
-      run: tflint --config .tflint.hcl
+      run: tflint --config .tflint.hcl --debug
       working-directory: ./terraform  # Specify the directory
 
     - name: Run Checkov
@@ -78,3 +81,14 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve
       working-directory: ./terraform  # Specify the directory
+Make sure your .tflint.hcl file in the ./terraform directory includes the following configuration:
+
+plugin "aws" {
+  enabled = true
+  version = "0.37.0"
+  source  = "github.com/terraform-linters/tflint-ruleset-aws"
+}
+
+rule "aws_lambda_function_deprecated_runtime" {
+  enabled = true
+}
