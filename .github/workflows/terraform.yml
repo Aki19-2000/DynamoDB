@@ -81,14 +81,3 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve
       working-directory: ./terraform  # Specify the directory
-Make sure your .tflint.hcl file in the ./terraform directory includes the following configuration:
-
-plugin "aws" {
-  enabled = true
-  version = "0.37.0"
-  source  = "github.com/terraform-linters/tflint-ruleset-aws"
-}
-
-rule "aws_lambda_function_deprecated_runtime" {
-  enabled = true
-}
