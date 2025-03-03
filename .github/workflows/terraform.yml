@@ -49,12 +49,8 @@ jobs:
       run: tflint --init
       working-directory: ./terraform  # Specify the directory
 
-    - name: List tflint plugins
-      run: ls -la ~/.tflint.d/plugins
-
     - name: Run tflint with custom config
-      run: |
-        TFLINT_LOG=debug tflint --config .tflint.hcl
+      run: tflint --config .tflint.hcl
       working-directory: ./terraform  # Specify the directory
 
     - name: Run Checkov
