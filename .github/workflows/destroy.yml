@@ -1,4 +1,4 @@
-name: Terraform Deployment Workflow
+name: Terraform Destroy Workflow
 
 on:
   workflow_dispatch:  # Allows manual triggering of the workflow
